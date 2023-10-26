@@ -23,7 +23,7 @@ public class AnimalServiceImpl implements AnimalService {
     public AnimalResponseDto saveAnimal(AnimalRequestDto request, String userId) {
         User user = findUserById(userId);
         var animal = animalRepository.save(new Animal(request));
-        user.getAnimals().add(new Animal(request));
+        user.getAnimals().add(new Animal(animal));
 
         return new AnimalResponseDto(animal);
     }
