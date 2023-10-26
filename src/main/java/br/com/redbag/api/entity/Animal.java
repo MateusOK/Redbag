@@ -2,14 +2,12 @@ package br.com.redbag.api.entity;
 
 import br.com.redbag.api.dto.request.AnimalRequestDto;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "animals")
@@ -25,6 +23,13 @@ public class Animal {
     public Animal(AnimalRequestDto request){
         this.name = request.name();
         this.color = request.color();
+    }
+
+    public Animal(Animal animal){
+        this.id = animal.getId();
+        this.name = animal.getName();
+        this.color = animal.getColor();
+        this.imageId = animal.getImageId();
     }
 
 }
