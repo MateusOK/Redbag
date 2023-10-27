@@ -5,6 +5,7 @@ import br.com.redbag.api.dto.response.AnimalResponseDto;
 import br.com.redbag.api.entity.Animal;
 import br.com.redbag.api.entity.Image;
 import br.com.redbag.api.entity.User;
+import br.com.redbag.api.enums.Gender;
 import br.com.redbag.api.repository.AnimalRepository;
 import br.com.redbag.api.repository.ImageRepository;
 import br.com.redbag.api.repository.UserRepository;
@@ -67,7 +68,7 @@ public class AnimalServiceImpl implements AnimalService {
 
         animal.setName(request.name());
         animal.setAge(request.age());
-        animal.setGender(request.gender());
+        animal.setGender(Gender.fromString(request.gender()));
         animal.setWeight(request.weight());
 
         Animal updatedAnimal = animalRepository.save(animal);
