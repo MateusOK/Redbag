@@ -6,8 +6,10 @@ import br.com.redbag.api.service.AnimalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,6 +23,12 @@ public class AnimalController {
         var response = animalService.saveAnimal(requestDto, userId);
         var uri = builder.path("animals/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
+    }
+
+    @PostMapping("/animals/upload/{animalId}")
+    public ResponseEntity<AnimalResponseDto> uploadImage(@PathVariable Long animalId, @RequestPart("file")MultipartFile file) throws IOException {
+        var response = animalService.uploadImage(animalId, file);
+        return ResponseEntity.ok(response);
     }
 
 
