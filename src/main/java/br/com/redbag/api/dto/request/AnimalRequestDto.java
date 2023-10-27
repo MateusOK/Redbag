@@ -6,7 +6,7 @@ public record AnimalRequestDto(
 
         String name,
         Integer age,
-        Gender gender,
+        String gender,
         Double weight
 
 ) {
