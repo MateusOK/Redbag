@@ -1,7 +1,9 @@
 package br.com.redbag.api.repository;
 
 import br.com.redbag.api.entity.Animal;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface AnimalRepository extends MongoRepository<Animal, String> {
+@Repository
+public interface AnimalRepository extends JpaRepository<Animal, Long> {
 }

@@ -1,24 +1,30 @@
 package br.com.redbag.api.entity;
 
 import br.com.redbag.api.dto.request.AnimalRequestDto;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Entity
+@Table(name = "animals")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "animals")
 public class Animal {
 
-
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String color;
-    private String imageId;
+
+    @OneToOne
+    @JoinColumn(name = "images_id")
+    private Image imageDetails;
 
     public Animal(AnimalRequestDto request){
         this.name = request.name();
@@ -29,7 +35,6 @@ public class Animal {
         this.id = animal.getId();
         this.name = animal.getName();
         this.color = animal.getColor();
-        this.imageId = animal.getImageId();
+        this.imageDetails = animal.getImageDetails();
     }
-
 }

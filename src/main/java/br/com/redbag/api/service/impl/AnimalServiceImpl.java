@@ -20,7 +20,7 @@ public class AnimalServiceImpl implements AnimalService {
     private final UserRepository userRepository;
 
     @Override
-    public AnimalResponseDto saveAnimal(AnimalRequestDto request, String userId) {
+    public AnimalResponseDto saveAnimal(AnimalRequestDto request, Long userId) {
         User user = findUserById(userId);
         var animal = animalRepository.save(new Animal(request));
         user.getAnimals().add(new Animal(animal));
@@ -29,14 +29,14 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public List<AnimalResponseDto> getUserAnimals(String userId) {
+    public List<AnimalResponseDto> getUserAnimals(Long userId) {
         User user = findUserById(userId);
         List<Animal> animals = user.getAnimals();
         return animals.stream().map(AnimalResponseDto::new).toList();
     }
 
     @Override
-    public void deleteAnimal(String userId, String animalId) {
+    public void deleteAnimal(Long userId, Long animalId) {
         User user = findUserById(userId);
         Animal animal = findAnimalById(animalId);
         animalRepository.delete(animal);
@@ -45,7 +45,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public AnimalResponseDto updateAnimal(String userId, String animalId, AnimalRequestDto request) {
+    public AnimalResponseDto updateAnimal(Long userId, Long animalId, AnimalRequestDto request) {
         User user = findUserById(userId);
         Animal animal = findAnimalById(animalId);
 
@@ -66,12 +66,12 @@ public class AnimalServiceImpl implements AnimalService {
 
     }
 
-    private User findUserById(String userId){
+    private User findUserById(Long userId){
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    private Animal findAnimalById(String animalId){
+    private Animal findAnimalById(Long animalId){
         return animalRepository.findById(animalId)
                 .orElseThrow(() -> new RuntimeException("Animal not found"));
     }

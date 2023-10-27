@@ -17,7 +17,7 @@ public class AnimalController {
     private final AnimalService animalService;
 
     @PostMapping("/animals/{userId}")
-    public ResponseEntity<AnimalResponseDto> saveAnimal(@RequestBody AnimalRequestDto requestDto, @PathVariable String userId, UriComponentsBuilder builder) {
+    public ResponseEntity<AnimalResponseDto> saveAnimal(@RequestBody AnimalRequestDto requestDto, @PathVariable Long userId, UriComponentsBuilder builder) {
         var response = animalService.saveAnimal(requestDto, userId);
         var uri = builder.path("animals/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
@@ -25,19 +25,19 @@ public class AnimalController {
 
 
     @GetMapping("/animals/{userId}")
-    public ResponseEntity<List<AnimalResponseDto>> getUserAnimals(@PathVariable String userId) {
+    public ResponseEntity<List<AnimalResponseDto>> getUserAnimals(@PathVariable Long userId) {
         var response = animalService.getUserAnimals(userId);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/animals/{userId}/{animalId}")
-    public ResponseEntity<Void> deleteAnimal(@PathVariable String userId, @PathVariable String animalId) {
+    public ResponseEntity<Void> deleteAnimal(@PathVariable Long userId, @PathVariable Long animalId) {
         animalService.deleteAnimal(userId, animalId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/animals/{userId}/{animalId}")
-    public ResponseEntity<AnimalResponseDto> updateAnimal(@PathVariable String userId, @PathVariable String animalId, @RequestBody AnimalRequestDto request) {
+    public ResponseEntity<AnimalResponseDto> updateAnimal(@PathVariable Long userId, @PathVariable Long animalId, @RequestBody AnimalRequestDto request) {
         var response = animalService.updateAnimal(userId, animalId, request);
         return ResponseEntity.ok(response);
     }

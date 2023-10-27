@@ -6,12 +6,12 @@ import br.com.redbag.api.dto.response.AnimalResponseDto;
 import java.util.List;
 
 public interface AnimalService {
-    AnimalResponseDto saveAnimal(AnimalRequestDto request, String userId);
+    AnimalResponseDto saveAnimal(AnimalRequestDto request, Long userId);
 
-    List<AnimalResponseDto> getUserAnimals(String userId);
+    List<AnimalResponseDto> getUserAnimals(Long userId);
 
-    void deleteAnimal(String userId, String animalId);
+    void deleteAnimal(Long userId, Long animalId);
 
-    AnimalResponseDto updateAnimal(String userId, String animalId, AnimalRequestDto request);
+    AnimalResponseDto updateAnimal(Long userId, Long animalId, AnimalRequestDto request);
 
 }
