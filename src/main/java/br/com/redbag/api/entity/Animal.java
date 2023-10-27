@@ -1,13 +1,18 @@
 package br.com.redbag.api.entity;
 
 import br.com.redbag.api.dto.request.AnimalRequestDto;
-import jakarta.persistence.*;
+import br.com.redbag.api.enums.Gender;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 @Table(name = "animals")
@@ -20,7 +25,14 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String color;
+    private Integer age;
+    private Gender gender;
+    private Double weight;
+
+
+    @ManyToOne
+    @JoinColumn (name = "user_id")
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "images_id")
@@ -28,13 +40,8 @@ public class Animal {
 
     public Animal(AnimalRequestDto request){
         this.name = request.name();
-        this.color = request.color();
-    }
-
-    public Animal(Animal animal){
-        this.id = animal.getId();
-        this.name = animal.getName();
-        this.color = animal.getColor();
-        this.imageDetails = animal.getImageDetails();
+        this.gender = request.gender();
+        this.age = request.age();
+        this.weight = request.weight();
     }
 }
