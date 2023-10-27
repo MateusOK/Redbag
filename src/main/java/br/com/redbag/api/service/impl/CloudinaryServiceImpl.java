@@ -1,6 +1,11 @@
 package br.com.redbag.api.service.impl;
 
+import br.com.redbag.api.entity.Animal;
+import br.com.redbag.api.entity.History;
+import br.com.redbag.api.enums.HealthStatus;
+import br.com.redbag.api.repository.AnimalRepository;
 import br.com.redbag.api.service.CloudinaryService;
+import br.com.redbag.api.utils.PredictionResponse;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -17,6 +24,7 @@ import java.util.Map;
 public class CloudinaryServiceImpl implements CloudinaryService {
 
     private final Cloudinary cloudinary;
+    private final AnimalRepository animalRepository;
     RestTemplate restTemplate = new RestTemplate();
 
     @Override
@@ -31,10 +39,28 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
-    public String predict(MultipartFile file) throws IOException {
+    public PredictionResponse predict(MultipartFile file) throws IOException {
         Map<String, String> image = uploadImage(file);
         String predictionURI = "http://127.0.0.1:8000/result/" + image.get("public_id");
-        ResponseEntity<String> prediction = restTemplate.getForEntity(predictionURI, String.class);
+        ResponseEntity<PredictionResponse> prediction = restTemplate.getForEntity(predictionURI, PredictionResponse.class);
         return prediction.getBody();
+    }
+
+    @Override
+    public PredictionResponse predictAndStore(MultipartFile file, Long animalId) throws IOException {
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new RuntimeException("Animal not found"));
+        PredictionResponse results = predict(file);
+        History history = new History();
+        history.setAnimal(animal);
+        history.setHealthStatus(HealthStatus.valueOf(results.getPredictedClass().toUpperCase()));
+        history.setAccuracy(results.getConfidence());
+        history.setDate(new Date());
+        history.setTime(LocalTime.now());
+
+        animal.getHealthHistory().add(history);
+        animalRepository.save(animal);
+
+        return results;
     }
 }
