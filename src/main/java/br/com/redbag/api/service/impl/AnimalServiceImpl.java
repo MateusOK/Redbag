@@ -40,10 +40,24 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public List<AnimalResponseDto> getUserAnimals(Long userId) {
+    public List<AnimalResponseDto> getAllUserAnimals(Long userId) {
         User user = findUserById(userId);
         List<Animal> animals = user.getAnimals();
         return animals.stream().map(AnimalResponseDto::new).toList();
+    }
+
+    @Override
+    public AnimalResponseDto getUserAnimalById(Long userId, Long animalId) {
+        User user = findUserById(userId);
+        Animal animal = findAnimalById(animalId);
+
+        if (!user.getAnimals().contains(animal)){
+            throw new RuntimeException("Animal does not belong to this user");
+        } else {
+            Integer index = user.getAnimals().indexOf(animal);
+            animal = user.getAnimals().get(index);
+        }
+        return new AnimalResponseDto(animal);
     }
 
     @Override

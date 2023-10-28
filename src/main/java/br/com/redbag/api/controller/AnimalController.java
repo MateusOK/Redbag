@@ -33,8 +33,14 @@ public class AnimalController {
 
 
     @GetMapping("/animals/{userId}")
-    public ResponseEntity<List<AnimalResponseDto>> getUserAnimals(@PathVariable Long userId) {
-        var response = animalService.getUserAnimals(userId);
+    public ResponseEntity<List<AnimalResponseDto>> getAllUserAnimals(@PathVariable Long userId) {
+        var response = animalService.getAllUserAnimals(userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/animals/{userId}/{animalId}")
+    public ResponseEntity<AnimalResponseDto> getUserAnimalById(@PathVariable Long userId, @PathVariable Long animalId) {
+        var response = animalService.getUserAnimalById(userId, animalId);
         return ResponseEntity.ok(response);
     }
 

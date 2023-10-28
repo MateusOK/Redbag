@@ -10,11 +10,13 @@ import java.util.List;
 public interface AnimalService {
     AnimalResponseDto saveAnimal(AnimalRequestDto request, Long userId);
 
-    List<AnimalResponseDto> getUserAnimals(Long userId);
+    List<AnimalResponseDto> getAllUserAnimals(Long userId);
 
     void deleteAnimal(Long userId, Long animalId);
 
     AnimalResponseDto updateAnimal(Long userId, Long animalId, AnimalRequestDto request);
 
     AnimalResponseDto uploadImage(Long animalId, MultipartFile file) throws IOException;
+
+    AnimalResponseDto getUserAnimalById(Long userId, Long animalId);
 }
