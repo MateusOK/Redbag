@@ -5,6 +5,7 @@ import br.com.redbag.api.dto.request.RegisterRequestDto;
 import br.com.redbag.api.dto.response.LoginResponseDto;
 import br.com.redbag.api.security.TokenService;
 import br.com.redbag.api.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(value = {"/login", "/signin"})
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto loginDto){
         var token = authService.login(loginDto);
         return ResponseEntity.ok(token);
     }
 
     @PostMapping(value = {"/register", "/signup"})
-    public ResponseEntity<String> register(@RequestBody RegisterRequestDto registerDto){
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequestDto registerDto){
         String response = authService.register(registerDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

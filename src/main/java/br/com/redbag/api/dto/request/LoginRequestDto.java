@@ -1,4 +1,10 @@
 package br.com.redbag.api.dto.request;
 
-public record LoginRequestDto(String usernameOrEmail, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginRequestDto(
+        @NotBlank(message = "{loginUsernameOrEmail.not.blank}")
+        String usernameOrEmail,
+        @NotBlank(message = "{loginPassword.not.blank}")
+        String password) {
 }
