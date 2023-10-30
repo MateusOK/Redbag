@@ -2,6 +2,7 @@ package br.com.redbag.api.controller;
 
 import br.com.redbag.api.dto.request.LoginRequestDto;
 import br.com.redbag.api.dto.request.RegisterRequestDto;
+import br.com.redbag.api.dto.response.LoginResponseDto;
 import br.com.redbag.api.security.TokenService;
 import br.com.redbag.api.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(value = {"/login", "/signin"})
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginDto){
         var token = authService.login(loginDto);
         return ResponseEntity.ok(token);
     }
