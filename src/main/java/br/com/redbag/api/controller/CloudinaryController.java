@@ -18,6 +18,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Cloudinary - Images")
+@SecurityRequirement(name = "bearerAuth")
 public class CloudinaryController {
 
     private final CloudinaryService cloudinaryService;

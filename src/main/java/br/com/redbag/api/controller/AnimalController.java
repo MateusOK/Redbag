@@ -22,6 +22,7 @@ import java.util.List;
 @Validated
 @RequestMapping(value = "/api/animals", produces = {"application/json"})
 @Tag(name = "Animals")
+@SecurityRequirement(name = "bearerAuth")
 public class AnimalController {
 
     private final AnimalService animalService;
