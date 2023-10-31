@@ -6,6 +6,8 @@ import br.com.redbag.api.entity.Animal;
 import br.com.redbag.api.entity.Image;
 import br.com.redbag.api.entity.User;
 import br.com.redbag.api.enums.Gender;
+import br.com.redbag.api.exceptions.ImageUploadException;
+import br.com.redbag.api.exceptions.ResourceNotFoundException;
 import br.com.redbag.api.repository.AnimalRepository;
 import br.com.redbag.api.repository.ImageRepository;
 import br.com.redbag.api.repository.UserRepository;
@@ -52,9 +54,9 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animal = findAnimalById(animalId);
 
         if (!user.getAnimals().contains(animal)){
-            throw new RuntimeException("Animal does not belong to this user");
+            throw new ResourceNotFoundException("Animal does not belong to this user");
         } else {
-            Integer index = user.getAnimals().indexOf(animal);
+            int index = user.getAnimals().indexOf(animal);
             animal = user.getAnimals().get(index);
         }
         return new AnimalResponseDto(animal);
@@ -75,7 +77,7 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animal = findAnimalById(animalId);
 
         if (!user.getAnimals().contains(animal)){
-            throw new RuntimeException("Animal does not belong to this user");
+            throw new ResourceNotFoundException("Animal does not belong to this user");
         } else {
             user.getAnimals().remove(animal);
         }
@@ -94,23 +96,27 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public AnimalResponseDto uploadImage(Long animalId, MultipartFile file) throws IOException {
-        Animal animal = findAnimalById(animalId);
-        Map<String, String> imageDetails = cloudinaryService.uploadImage(file);
-        Image image = new Image(imageDetails.get("url"), imageDetails.get("public_id"));
+    public AnimalResponseDto uploadImage(Long animalId, MultipartFile file) {
+        try {
+            Animal animal = findAnimalById(animalId);
+            Map<String, String> imageDetails = cloudinaryService.uploadImage(file);
+            Image image = new Image(imageDetails.get("url"), imageDetails.get("public_id"));
 
-        imageRepository.save(image);
-        animal.setImageDetails(image);
-        return new AnimalResponseDto(animalRepository.save(animal));
+            imageRepository.save(image);
+            animal.setImageDetails(image);
+            return new AnimalResponseDto(animalRepository.save(animal));
+        }catch (IOException e){
+            throw new ImageUploadException("Error while uploading image");
+        }
     }
 
     private User findUserById(Long userId){
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     private Animal findAnimalById(Long animalId){
         return animalRepository.findById(animalId)
-                .orElseThrow(() -> new RuntimeException("Animal not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Animal not found"));
     }
 }

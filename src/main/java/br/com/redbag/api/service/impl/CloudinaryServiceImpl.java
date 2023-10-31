@@ -3,6 +3,8 @@ package br.com.redbag.api.service.impl;
 import br.com.redbag.api.entity.Animal;
 import br.com.redbag.api.entity.History;
 import br.com.redbag.api.enums.HealthStatus;
+import br.com.redbag.api.exceptions.ImageUploadException;
+import br.com.redbag.api.exceptions.ResourceNotFoundException;
 import br.com.redbag.api.repository.AnimalRepository;
 import br.com.redbag.api.service.CloudinaryService;
 import br.com.redbag.api.utils.PredictionResponse;
@@ -29,38 +31,50 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     public Map<String, String> uploadImage(MultipartFile file) throws IOException {
-        Map<String, String> options = ObjectUtils.asMap();
-        Map<String, Object> response = cloudinary.uploader().upload(file.getBytes(), options);
+        try{
+            Map<String, String> options = ObjectUtils.asMap();
+            Map<String, Object> response = cloudinary.uploader().upload(file.getBytes(), options);
 
-        String publicId = response.get("public_id").toString();
-        String url = response.get("url").toString();
+            String publicId = response.get("public_id").toString();
+            String url = response.get("url").toString();
 
-        return Map.of("public_id", publicId, "url", url);
+            return Map.of("public_id", publicId, "url", url);
+        } catch (Exception e){
+            throw new ImageUploadException("Error while uploading image");
+        }
     }
 
     @Override
-    public PredictionResponse predict(MultipartFile file) throws IOException {
-        Map<String, String> image = uploadImage(file);
-        String predictionURI = "http://127.0.0.1:8000/result/" + image.get("public_id");
-        ResponseEntity<PredictionResponse> prediction = restTemplate.getForEntity(predictionURI, PredictionResponse.class);
-        return prediction.getBody();
+    public PredictionResponse predict(MultipartFile file){
+        try {
+            Map<String, String> image = uploadImage(file);
+            String predictionURI = "http://127.0.0.1:8000/result/" + image.get("public_id");
+            ResponseEntity<PredictionResponse> prediction = restTemplate.getForEntity(predictionURI, PredictionResponse.class);
+            return prediction.getBody();
+        }catch (Exception e){
+            throw new ImageUploadException("Error while uploading image");
+        }
     }
 
     @Override
-    public PredictionResponse predictAndStore(MultipartFile file, Long animalId) throws IOException {
-        Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new RuntimeException("Animal not found"));
-        PredictionResponse results = predict(file);
-        History history = new History();
-        history.setAnimal(animal);
-        history.setHealthStatus(HealthStatus.valueOf(results.getPredictedClass().toUpperCase()));
-        history.setAccuracy(results.getConfidence());
-        history.setDate(new Date());
-        history.setTime(LocalTime.now());
+    public PredictionResponse predictAndStore(MultipartFile file, Long animalId){
+        try{
+            Animal animal = animalRepository.findById(animalId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Animal not found"));
+            PredictionResponse results = predict(file);
+            History history = new History();
+            history.setAnimal(animal);
+            history.setHealthStatus(HealthStatus.valueOf(results.getPredictedClass().toUpperCase()));
+            history.setAccuracy(results.getConfidence());
+            history.setDate(new Date());
+            history.setTime(LocalTime.now());
 
-        animal.getHealthHistory().add(history);
-        animalRepository.save(animal);
+            animal.getHealthHistory().add(history);
+            animalRepository.save(animal);
 
-        return results;
+            return results;
+        }catch (Exception e){
+            throw new ImageUploadException("Error while uploading image");
+        }
     }
 }
