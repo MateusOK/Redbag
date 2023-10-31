@@ -5,17 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Date;
+import org.springframework.stereotype.Component;
+import java.time.ZonedDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Component
 public class ExceptionResponseBody {
     private Integer status;
     private String message;
     private String path;
-    private Date timeStamp;
+    private ZonedDateTime timeStamp;
 }
