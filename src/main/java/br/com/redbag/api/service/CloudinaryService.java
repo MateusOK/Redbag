@@ -8,9 +8,9 @@ import java.util.Map;
 
 public interface CloudinaryService {
 
-    Map<String, String> uploadImage(MultipartFile file) throws IOException;
+    Map<String, String> uploadImage(MultipartFile file);
 
-    PredictionResponse predict(MultipartFile file) throws IOException;
+    PredictionResponse predict(MultipartFile file);
 
-    PredictionResponse predictAndStore(MultipartFile file, Long animalId) throws IOException;
+    PredictionResponse predictAndStore(MultipartFile file, Long animalId);
 }

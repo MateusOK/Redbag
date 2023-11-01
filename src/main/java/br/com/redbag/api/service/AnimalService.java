@@ -16,7 +16,7 @@ public interface AnimalService {
 
     AnimalResponseDto updateAnimal(Long userId, Long animalId, AnimalRequestDto request);
 
-    AnimalResponseDto uploadImage(Long animalId, MultipartFile file) throws IOException;
+    AnimalResponseDto uploadImage(Long animalId, MultipartFile file);
 
     AnimalResponseDto getUserAnimalById(Long userId, Long animalId);
 }

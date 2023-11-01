@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Cloudinary - Images")
@@ -24,14 +22,14 @@ public class CloudinaryController {
     private final CloudinaryService cloudinaryService;
     @Operation(summary = "Predict animal from image", method = "POST")
     @PostMapping(value = "/predict", consumes = {"multipart/form-data"})
-    public ResponseEntity<PredictionResponse> predict(@RequestPart("file") MultipartFile file) throws IOException {
+    public ResponseEntity<PredictionResponse> predict(@RequestPart("file") MultipartFile file) {
         var response = cloudinaryService.predict(file);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Predict animal from image and store result in database", method = "POST")
     @PostMapping(value = "/predict/{animalId}", consumes = {"multipart/form-data"})
-    public ResponseEntity<PredictionResponse> predictAndStore(@RequestPart("file") MultipartFile file, @PathVariable Long animalId) throws IOException {
+    public ResponseEntity<PredictionResponse> predictAndStore(@RequestPart("file") MultipartFile file, @PathVariable Long animalId){
         var response = cloudinaryService.predictAndStore(file, animalId);
         return ResponseEntity.ok(response);
     }
