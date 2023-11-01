@@ -105,7 +105,7 @@ public class AnimalServiceImpl implements AnimalService {
             imageRepository.save(image);
             animal.setImageDetails(image);
             return new AnimalResponseDto(animalRepository.save(animal));
-        }catch (IOException e){
+        }catch (Exception e){
             throw new ImageUploadException("Error while uploading image");
         }
     }

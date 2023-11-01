@@ -11,6 +11,7 @@ import br.com.redbag.api.utils.PredictionResponse;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,11 +28,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     private final Cloudinary cloudinary;
     private final AnimalRepository animalRepository;
+
+    @Value("${app.prediction-url}")
+    private static String PREDICTION_URL;
     RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public Map<String, String> uploadImage(MultipartFile file) throws IOException {
-        try{
+    public Map<String, String> uploadImage(MultipartFile file) {
+        try {
             Map<String, String> options = ObjectUtils.asMap();
             Map<String, Object> response = cloudinary.uploader().upload(file.getBytes(), options);
 
@@ -39,26 +43,26 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             String url = response.get("url").toString();
 
             return Map.of("public_id", publicId, "url", url);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ImageUploadException("Error while uploading image");
         }
     }
 
     @Override
-    public PredictionResponse predict(MultipartFile file){
+    public PredictionResponse predict(MultipartFile file) {
         try {
             Map<String, String> image = uploadImage(file);
-            String predictionURI = "http://127.0.0.1:8000/result/" + image.get("public_id");
+            String predictionURI = PREDICTION_URL + image.get("public_id");
             ResponseEntity<PredictionResponse> prediction = restTemplate.getForEntity(predictionURI, PredictionResponse.class);
             return prediction.getBody();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ImageUploadException("Error while uploading image");
         }
     }
 
     @Override
-    public PredictionResponse predictAndStore(MultipartFile file, Long animalId){
-        try{
+    public PredictionResponse predictAndStore(MultipartFile file, Long animalId) {
+        try {
             Animal animal = animalRepository.findById(animalId)
                     .orElseThrow(() -> new ResourceNotFoundException("Animal not found"));
             PredictionResponse results = predict(file);
@@ -73,7 +77,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             animalRepository.save(animal);
 
             return results;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ImageUploadException("Error while uploading image");
         }
     }
