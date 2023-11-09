@@ -5,14 +5,13 @@ import br.com.redbag.api.dto.request.RegisterRequestDto;
 import br.com.redbag.api.dto.response.LoginResponseDto;
 import br.com.redbag.api.entity.User;
 import br.com.redbag.api.enums.UserRole;
+import br.com.redbag.api.exceptions.ResourceAlreadyExistsException;
 import br.com.redbag.api.repository.UserRepository;
 import br.com.redbag.api.security.TokenService;
 import br.com.redbag.api.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,10 +35,10 @@ public class AuthServiceImpl implements AuthService {
     public String register(RegisterRequestDto request) {
 
         if(userRepository.existsByUsername(request.username())){
-            throw new RuntimeException("Username is already exists!.");
+            throw new ResourceAlreadyExistsException("Username already exists!.");
         }
         if(userRepository.existsByEmail(request.email())){
-            throw new RuntimeException("Email is already exists!.");
+            throw new ResourceAlreadyExistsException("Email already exists!.");
         }
 
         User user = new User();
@@ -53,6 +52,4 @@ public class AuthServiceImpl implements AuthService {
 
         return "User registered successfully!.";
     }
-
-
 }
