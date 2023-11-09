@@ -62,6 +62,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
     }
 
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponseBody> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex){
+        responseBody.setStatus(HttpStatus.CONFLICT.value());
+        responseBody.setMessage(ex.getMessage());
+        responseBody.setTimeStamp(getTimeStamp());
+        responseBody.setPath(request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
+    }
+
     @ExceptionHandler(ImageUploadException.class)
     public ResponseEntity<ExceptionResponseBody> handleImageUploadException(ImageUploadException ex){
         responseBody.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -69,6 +78,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         responseBody.setTimeStamp(getTimeStamp());
         responseBody.setPath(request.getRequestURI());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    }
+
+    @ExceptionHandler(ForbiddenUserRequestException.class)
+    public ResponseEntity<ExceptionResponseBody> handleForbiddenUserRequestException(ForbiddenUserRequestException ex){
+        responseBody.setStatus(HttpStatus.FORBIDDEN.value());
+        responseBody.setMessage(ex.getMessage());
+        responseBody.setTimeStamp(getTimeStamp());
+        responseBody.setPath(request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
     }
 
     @ExceptionHandler(IllegalStateException.class)
