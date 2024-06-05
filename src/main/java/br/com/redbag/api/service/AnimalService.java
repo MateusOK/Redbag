@@ -4,7 +4,6 @@ import br.com.redbag.api.dto.request.AnimalRequestDto;
 import br.com.redbag.api.dto.response.AnimalResponseDto;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface AnimalService {

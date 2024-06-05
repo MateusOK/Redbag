@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 
 public interface UserService {
 
-    void deleteUser(Long userId, Authentication authentication);
+    void deleteUser(Authentication authentication);
 
-    UserResponseDto updateUser(UserRequestDto request, Long userId, Authentication authentication);
+    UserResponseDto updateUser(UserRequestDto request, Authentication authentication);
 }

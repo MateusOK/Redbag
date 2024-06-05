@@ -1,6 +1,5 @@
 package br.com.redbag.api.dto.request;
 
-import br.com.redbag.api.enums.Gender;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

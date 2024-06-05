@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.Map;
@@ -30,13 +29,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     private final AnimalRepository animalRepository;
 
     @Value("${app.prediction-url}")
-    private static String PREDICTION_URL;
+    private String predictionUrl;
+    private static final String MESSAGE_ERROR = "Error while uploading image";
     RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public Map<String, String> uploadImage(MultipartFile file) {
         try {
-            Map<String, String> options = ObjectUtils.asMap();
+            Map<String, String> options = ObjectUtils.asMap("format", "jpg");
             Map<String, Object> response = cloudinary.uploader().upload(file.getBytes(), options);
 
             String publicId = response.get("public_id").toString();
@@ -44,7 +44,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
             return Map.of("public_id", publicId, "url", url);
         } catch (Exception e) {
-            throw new ImageUploadException("Error while uploading image");
+            throw new ImageUploadException(MESSAGE_ERROR);
         }
     }
 
@@ -52,11 +52,11 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     public PredictionResponse predict(MultipartFile file) {
         try {
             Map<String, String> image = uploadImage(file);
-            String predictionURI = PREDICTION_URL + image.get("public_id");
+            String predictionURI = predictionUrl + image.get("public_id");
             ResponseEntity<PredictionResponse> prediction = restTemplate.getForEntity(predictionURI, PredictionResponse.class);
             return prediction.getBody();
         } catch (Exception e) {
-            throw new ImageUploadException("Error while uploading image");
+            throw new ImageUploadException(MESSAGE_ERROR);
         }
     }
 
@@ -78,7 +78,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
             return results;
         } catch (Exception e) {
-            throw new ImageUploadException("Error while uploading image");
+            throw new ImageUploadException(MESSAGE_ERROR);
         }
     }
 }

@@ -3,6 +3,7 @@ package br.com.redbag.api.controller;
 import br.com.redbag.api.dto.request.LoginRequestDto;
 import br.com.redbag.api.dto.request.RegisterRequestDto;
 import br.com.redbag.api.dto.response.LoginResponseDto;
+import br.com.redbag.api.dto.response.UserResponseDto;
 import br.com.redbag.api.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,8 +32,8 @@ public class AuthController {
 
     @Operation(summary = "Register", method = "POST")
     @PostMapping(value = {"/register", "/signup"}, consumes = {"application/json"})
-    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequestDto registerDto){
-        String response = authService.register(registerDto);
+    public ResponseEntity<UserResponseDto> register(@RequestBody @Valid RegisterRequestDto registerDto){
+        var response = authService.register(registerDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

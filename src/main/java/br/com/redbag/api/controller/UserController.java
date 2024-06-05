@@ -7,13 +7,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,17 +27,17 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "Delete a user by id", method = "DELETE")
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable @Positive(message = "User id must be higher than 0") Long userId, Authentication authentication) {
-        userService.deleteUser(userId, authentication);
+    @Operation(summary = "Delete a user", method = "DELETE")
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(Authentication authentication) {
+        userService.deleteUser(authentication);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Update a user by id", method = "PUT")
-    @PutMapping(value = "/{userId}", consumes = {"application/json"})
-    public ResponseEntity<UserResponseDto> updateUser(@RequestBody @Valid UserRequestDto request, @PathVariable @Positive(message = "User id must be higher than 0") Long userId, Authentication authentication) {
-        var response = userService.updateUser(request, userId, authentication);
+    @Operation(summary = "Update a user", method = "PUT")
+    @PutMapping(consumes = {"application/json"})
+    public ResponseEntity<UserResponseDto> updateUser(@RequestBody @Valid UserRequestDto request, Authentication authentication) {
+        var response = userService.updateUser(request, authentication);
         return ResponseEntity.ok(response);
     }
 }

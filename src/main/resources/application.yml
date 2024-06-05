@@ -4,7 +4,7 @@ spring:
       max-file-size: 3MB
       max-request-size: 3MB
   datasource:
-    url: jdbc:h2:mem:testdb
+    url:
     driverClassName: org.h2.Driver
     username:
     password:
@@ -12,7 +12,8 @@ spring:
   h2:
     console:
       enabled: true
-      path: /h2
+      settings:
+        web-allow-others: true
 
   jpa:
     hibernate:
@@ -23,3 +24,12 @@ cloudinary:
   cloud-name:
   api-key:
   api-secret:
+
+app:
+  jwt-secret:
+  prediction-url:
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG

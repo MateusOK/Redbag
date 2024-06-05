@@ -3,6 +3,7 @@ package br.com.redbag.api.service.impl;
 import br.com.redbag.api.dto.request.LoginRequestDto;
 import br.com.redbag.api.dto.request.RegisterRequestDto;
 import br.com.redbag.api.dto.response.LoginResponseDto;
+import br.com.redbag.api.dto.response.UserResponseDto;
 import br.com.redbag.api.entity.User;
 import br.com.redbag.api.enums.UserRole;
 import br.com.redbag.api.exceptions.ResourceAlreadyExistsException;
@@ -32,12 +33,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String register(RegisterRequestDto request) {
+    public UserResponseDto register(RegisterRequestDto request) {
 
-        if(userRepository.existsByUsername(request.username())){
+        if(Boolean.TRUE.equals(userRepository.existsByUsername(request.username()))){
             throw new ResourceAlreadyExistsException("Username already exists!.");
         }
-        if(userRepository.existsByEmail(request.email())){
+        if(Boolean.TRUE.equals(userRepository.existsByEmail(request.email()))){
             throw new ResourceAlreadyExistsException("Email already exists!.");
         }
 
@@ -50,6 +51,6 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-        return "User registered successfully!.";
+        return new UserResponseDto(user);
     }
 }
