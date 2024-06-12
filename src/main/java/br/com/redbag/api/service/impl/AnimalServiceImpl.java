@@ -82,9 +82,7 @@ public class AnimalServiceImpl implements AnimalService {
         }
 
         animal.setName(request.name());
-        animal.setAge(request.age());
-        animal.setGender(Gender.fromString(request.gender()));
-        animal.setWeight(request.weight());
+        animal.setColor(request.color());
 
         Animal updatedAnimal = animalRepository.save(animal);
         user.getAnimals().add(updatedAnimal);

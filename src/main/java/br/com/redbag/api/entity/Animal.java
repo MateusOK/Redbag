@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HexFormat;
 import java.util.List;
 
 @Entity
@@ -32,11 +33,7 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-    private Double weight;
+    private String color;
 
     @ManyToOne
     @JoinColumn (name = "user_id")
@@ -51,8 +48,6 @@ public class Animal {
 
     public Animal(AnimalRequestDto request){
         this.name = request.name();
-        this.gender = Gender.fromString(request.gender());
-        this.age = request.age();
-        this.weight = request.weight();
+        this.color = request.color();
     }
 }
