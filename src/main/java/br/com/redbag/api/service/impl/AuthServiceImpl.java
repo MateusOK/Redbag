@@ -29,7 +29,8 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDto login(LoginRequestDto loginDto) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(loginDto.usernameOrEmail(), loginDto.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-        return new LoginResponseDto(tokenService.generateToken((User) auth.getPrincipal()));
+        User id = (User) auth.getPrincipal();
+        return new LoginResponseDto(tokenService.generateToken((User) auth.getPrincipal()), id.getId());
     }
 
     @Override
