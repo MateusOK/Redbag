@@ -1,6 +1,7 @@
 package br.com.redbag.api.entity;
 
 import br.com.redbag.api.enums.HealthStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,8 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalTime;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -31,11 +31,14 @@ public class History {
     @Enumerated(EnumType.STRING)
     private HealthStatus healthStatus;
     private Double accuracy;
-    private Date date;
-    private LocalTime time;
+    private LocalDateTime time;
+
+    @ManyToOne
+    private Image image;
 
     @ManyToOne
     @JoinColumn(name = "animal_id")
+    @JsonIgnore
     private Animal animal;
 
 }
