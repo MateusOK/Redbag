@@ -4,10 +4,10 @@ spring:
       max-file-size: 3MB
       max-request-size: 3MB
   datasource:
-    url:
+    url: ${SPRING_DATASOURCE_URL}
     driverClassName: org.h2.Driver
-    username:
-    password:
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   h2:
     console:
@@ -21,13 +21,13 @@ spring:
     show-sql: true
 
 cloudinary:
-  cloud-name:
-  api-key:
-  api-secret:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
 
 app:
-  jwt-secret:
-  prediction-url: http://34.198.226.29/result/
+  jwt-secret: ${JWT_API_KEY}
+  prediction-url: ${PYTHON_API_URL}
 
 logging:
   level:
