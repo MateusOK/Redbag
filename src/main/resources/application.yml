@@ -27,7 +27,7 @@ cloudinary:
 
 app:
   jwt-secret:
-  prediction-url:
+  prediction-url: http://34.198.226.29/result/
 
 logging:
   level:
