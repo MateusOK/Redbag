@@ -5,7 +5,6 @@ import br.com.redbag.api.dto.response.AnimalResponseDto;
 import br.com.redbag.api.entity.Animal;
 import br.com.redbag.api.entity.Image;
 import br.com.redbag.api.entity.User;
-import br.com.redbag.api.enums.Gender;
 import br.com.redbag.api.exceptions.ImageUploadException;
 import br.com.redbag.api.exceptions.ResourceNotFoundException;
 import br.com.redbag.api.repository.AnimalRepository;
