@@ -35,15 +35,6 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable());
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        httpSecurity.cors(cors -> cors.configurationSource(request -> {
-            CorsConfiguration corsConfig = new CorsConfiguration();
-            corsConfig.setAllowedOrigins(List.of("*"));
-            corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-            corsConfig.setAllowedHeaders(List.of("*"));
-            corsConfig.setAllowCredentials(true);
-            return corsConfig;
-        }));
-
         httpSecurity.authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/webjars/**")).permitAll()
@@ -56,9 +47,7 @@ public class SecurityConfig {
                 )
                 .cors(Customizer.withDefaults())
                 .addFilterBefore(JwtValidationFilter, UsernamePasswordAuthenticationFilter.class);
-
         httpSecurity.headers().frameOptions().disable();
-
         return httpSecurity.build();
     }
 
