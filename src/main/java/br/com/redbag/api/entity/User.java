@@ -1,5 +1,6 @@
 package br.com.redbag.api.entity;
 
+import br.com.redbag.api.dto.request.UserRequestDto;
 import br.com.redbag.api.enums.UserRole;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 @Entity
@@ -39,6 +41,14 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<Animal> animals;
+
+    public User(UserRequestDto request){
+        this.name = request.name();
+        this.username = request.username();
+        this.email = request.email();
+        this.password = request.password();
+        this.role = UserRole.USER;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
