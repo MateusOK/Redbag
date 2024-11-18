@@ -20,10 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -37,7 +34,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     @Value("${app.prediction-url}")
     private String predictionUrl;
     private static final String MESSAGE_ERROR = "Error while uploading image";
-    RestTemplate restTemplate = new RestTemplate();
+
+    private final RestTemplate restTemplate;
 
     @Override
     public Map<String, String> uploadImage(MultipartFile file) {
