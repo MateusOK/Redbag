@@ -16,7 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -31,6 +35,15 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable());
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        httpSecurity.cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration corsConfig = new CorsConfiguration();
+            corsConfig.setAllowedOrigins(List.of("*"));
+            corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+            corsConfig.setAllowedHeaders(List.of("*"));
+            corsConfig.setAllowCredentials(true);
+            return corsConfig;
+        }));
+
         httpSecurity.authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/webjars/**")).permitAll()
@@ -43,7 +56,9 @@ public class SecurityConfig {
                 )
                 .cors(Customizer.withDefaults())
                 .addFilterBefore(JwtValidationFilter, UsernamePasswordAuthenticationFilter.class);
+
         httpSecurity.headers().frameOptions().disable();
+
         return httpSecurity.build();
     }
 
