@@ -14,11 +14,11 @@ Após abrir o projeto na IDE precisaremos alterar o arquivo **application.yml** 
 ![image](https://github.com/user-attachments/assets/b5db5521-9c1d-4e6c-a60d-9acb1be715c7)
 
 
-Utilizamos o Cloudinary como nosso banco de imagens, para conseguir as suas chaves bastas acessar https://cloudinary.com/ e criar a sua conta.
+Utilizamos o Cloudinary como nosso banco de imagens, para conseguir as suas chaves bastas acessar https://cloudinary.com/ e criar a sua conta, não disponilizaremos as nossas por questões de segurança.
 
 Você precisará fazer a mesma coisa para o Python: 
 
 ![image](https://github.com/user-attachments/assets/65074cfd-129a-4b74-847a-0013b7c8b3e0)
 
 <br></br>
-Após isso basta rodar os dois e pronto! Caso queira, pode testar através do Swagger acessando: http://localhost:8080/swagger-ui/index.html#/
+Após isso basta rodar os dois e pronto! Caso queira, você poderá testar as rotas da API através do Swagger acessando: http://localhost:8080/swagger-ui/index.html#/
