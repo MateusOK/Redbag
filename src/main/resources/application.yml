@@ -7,7 +7,6 @@ spring:
         - POST
         - PUT
         - DELETE
-        - OPTIONS
       allowed-headers: "*"
       allow-credentials: true
   servlet:
