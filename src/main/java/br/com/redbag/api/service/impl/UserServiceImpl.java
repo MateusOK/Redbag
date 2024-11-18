@@ -28,16 +28,18 @@ public class UserServiceImpl implements UserService{
     public UserResponseDto updateUser(UserRequestDto request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
-        if (user.getUsername().equalsIgnoreCase(request.username())){
+        if (!user.getUsername().equalsIgnoreCase(request.username())) {
+            if (Boolean.TRUE.equals(userRepository.existsByUsername(request.username()))) {
+                throw new ResourceAlreadyExistsException("Username already exists!");
+            }
             user.setUsername(request.username());
-        } else if (Boolean.TRUE.equals(userRepository.existsByUsername(request.username()))) {
-            throw new ResourceAlreadyExistsException("Username already exists!.");
         }
 
-        if (user.getEmail().equalsIgnoreCase(request.email())){
+        if (!user.getEmail().equalsIgnoreCase(request.email())) {
+            if (Boolean.TRUE.equals(userRepository.existsByEmail(request.email()))) {
+                throw new ResourceAlreadyExistsException("Email already exists!");
+            }
             user.setEmail(request.email());
-        } else if (Boolean.TRUE.equals(userRepository.existsByEmail(request.email()))) {
-            throw new ResourceAlreadyExistsException("Email already exists!.");
         }
 
         user.setName(request.name());
